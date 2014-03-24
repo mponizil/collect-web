@@ -29,7 +29,7 @@ exports.bookmarklet = (req, res) ->
 
 exports.extras = (req, res) ->
   baseUrl = getBaseUrl(req)
-  res.render('extras', {baseUrl})
+  res.render('extras', bookmarkletUrl: "#{baseUrl}/bookmarklet")
 
 exports.popup = (req, res) ->
   item =
