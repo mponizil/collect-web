@@ -11,7 +11,7 @@ css = """
   border: 3px solid red;
 }
 #collect-wrap .image-candidate:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 """
 
@@ -83,7 +83,28 @@ class Collectible
     @containerEl.appendChild(overlay)
 
   chooseImage: (image) ->
-    console.log 'image', image
+    item =
+      image: image.src
+      title: document.title
+      price: 25.99
+
+    popupParams =
+      width: 550
+      height: 415
+      scrollbars: 'no'
+      toolbar: 'no'
+      location: 'no'
+      directories: 'no'
+      status: 'no'
+      menubar: 'no'
+      resizable: 'no'
+    popupParams.left = window.screenLeft + (window.innerWidth - popupParams.width) * .5;
+    popupParams.top = window.screenTop + (window.innerHeight - popupParams.height) * .4;
+
+    queryString = ("#{key}=#{value}" for key, value of item).join('&')
+    url = "http://127.0.0.1:3000/popup?#{queryString}"
+    popupParams = ("#{key}=#{value}" for key, value of popupParams).join(',')
+    window.open(url, '_blank', popupParams)
 
   getPrice: ->
     console.log 'getting price'

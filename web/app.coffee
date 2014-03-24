@@ -23,6 +23,7 @@ app.configure 'development', ->
 
 app.get('/', routes.index)
 app.get('/bookmarklet', routes.bookmarklet)
+app.get('/popup', routes.popup)
 
 http.createServer(app).listen app.get('port'), ->
   console.log("Express server listening on port #{app.get('port')}")

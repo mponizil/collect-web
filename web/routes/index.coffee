@@ -7,3 +7,11 @@ exports.bookmarklet = (req, res) ->
     host = "#{host}:#{port}"
 
   res.render('bookmarklet', {host})
+
+exports.popup = (req, res) ->
+  item =
+    title: req.query.title or "N/A"
+    image: req.query.image or "http://placehold.it/400x300"
+    price: req.query.price or "N/A"
+
+  res.render('popup', {item})
