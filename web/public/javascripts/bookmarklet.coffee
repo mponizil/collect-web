@@ -15,6 +15,11 @@ css = """
 }
 """
 
+# Config
+
+config =
+  BASE_URL: '<%= baseUrl %>' or 'http://localhost:3000'
+
 # Utility
 
 u =
@@ -102,7 +107,7 @@ class Collectible
     popupParams.top = window.screenTop + (window.innerHeight - popupParams.height) * .4;
 
     queryString = ("#{key}=#{value}" for key, value of item).join('&')
-    url = "http://127.0.0.1:3000/popup?#{queryString}"
+    url = "#{config.BASE_URL}/popup?#{queryString}"
     popupParams = ("#{key}=#{value}" for key, value of popupParams).join(',')
     window.open(url, '_blank', popupParams)
 

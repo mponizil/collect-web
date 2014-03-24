@@ -22,6 +22,7 @@ app.configure 'development', ->
   app.use(express.errorHandler())
 
 app.get('/', routes.index)
+app.get('/extras', routes.extras)
 app.get('/bookmarklet', routes.bookmarklet)
 app.get('/popup', routes.popup)
 
