@@ -6,26 +6,32 @@ css = """
 }
 #collect-wrap .image-candidate {
   position: absolute;
-  z-index: 0;
+  z-index: 10000;
   cursor: pointer;
-  border: 3px solid gray;
+  border: 3px solid red;
 }
 #collect-wrap .image-candidate:hover {
-  border: 3px solid black;
+  background-color: rgba(255, 255, 255, 0.2);
 }
 """
 
 # Utility
 
 u =
+
+  # DOM manipulation
   addClass: (el, name) ->
     el.className += if el.className.length then " #{name}" else name
   removeClass: (el, name) ->
     el.className = el.className.replace(new RegExp("\\s*#{name}\\s*", 'g'), '')
+
+  # Event listeners
   on: (el, eventName, callback) ->
     el.addEventListener(eventName, callback)
   off: (el, eventName, callback) ->
     el.removeEventListener(eventName, callback)
+
+  # DOM computation
   getOffset: (el) ->
     left = 0
     top = 0
@@ -71,10 +77,13 @@ class Collectible
     overlay.style.width = "#{image.offsetWidth}px"
     overlay.style.height = "#{image.offsetHeight}px"
 
-    u.on overlay, 'click', (e) -> do (image) ->
-      console.log 'click', image
+    u.on overlay, 'click', (e) => do (image) =>
+      @chooseImage(image)
 
     @containerEl.appendChild(overlay)
+
+  chooseImage: (image) ->
+    console.log 'image', image
 
   getPrice: ->
     console.log 'getting price'
