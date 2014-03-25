@@ -1,6 +1,6 @@
 <% include ../layout/head %>
 
-<h2><%= items.length %> saved items</h2>
+<h2><%= items.length %> saved item<%= items.length !== 1 ? 's' : '' %></h2>
 
 <% for (var i = 0; i < items.length; i++) { %>
 
