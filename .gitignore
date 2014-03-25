@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
-web/public/javascripts/*.js
+public/javascripts/*.js
 npm-debug.log
