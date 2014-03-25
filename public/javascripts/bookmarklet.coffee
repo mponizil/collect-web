@@ -108,7 +108,8 @@ class Collectible
     popupParams.left = window.screenLeft + (window.innerWidth - popupParams.width) * .5;
     popupParams.top = window.screenTop + (window.innerHeight - popupParams.height) * .4;
 
-    queryString = ("#{key}=#{value}" for key, value of item).join('&')
+    e = encodeURIComponent
+    queryString = ("#{key}=#{e(value)}" for key, value of item).join('&')
     url = "#{config.BASE_URL}/items/new?#{queryString}"
     popupParams = ("#{key}=#{value}" for key, value of popupParams).join(',')
     window.open(url, '_blank', popupParams)
