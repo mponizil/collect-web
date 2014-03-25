@@ -3,12 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node app.coffee",
+    "start": "coffee app.coffee",
     "postinstall": "coffee -c public/javascripts/"
   },
   "dependencies": {
     "express": "3.5.0",
-    "jade": "*"
+    "jade": "*",
+    "ejs": "^1.0.0"
   },
   "devDependencies": {
     "coffee-script": "^1.7.1",
