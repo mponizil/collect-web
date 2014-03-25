@@ -100,10 +100,12 @@
       item = {
         image: image.src,
         title: document.title,
-        price: 25.99
+        price: 25.99,
+        hostname: location.hostname,
+        url: location.href
       };
       popupParams = {
-        width: 550,
+        width: 600,
         height: 415,
         scrollbars: 'no',
         toolbar: 'no',

@@ -6,7 +6,9 @@ exports.new = (req, res) ->
   item =
     title: req.query.title or "N/A"
     image: req.query.image or "http://placehold.it/400x300"
-    price: req.query.price or "N/A"
+    price: req.query.price or 0
+    hostname: req.query.hostname or "N/A"
+    url: req.query.url or "N/A"
 
   res.render('items/new', {item})
 
@@ -15,6 +17,8 @@ exports.create = (req, res) ->
     title: req.body.title or "N/A"
     image: req.body.image or "http://placehold.it/400x300"
     price: parseFloat(req.body.price) or 0
+    hostname: req.body.hostname or "N/A"
+    url: req.body.url or "N/A"
 
   req.app.kaiseki.createObject 'item', item, (err, response, body, success) ->
     res.redirect('/items')

@@ -1,21 +1,23 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Collect | View Item</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
+<% include ../layout/head %>
 
-    <% for (var i = 0; i < items.length; i++) { %>
+<h2><%= items.length %> saved items</h2>
 
-    <h1><%= items[i].title %></h1>
+<% for (var i = 0; i < items.length; i++) { %>
+
+<div class='media'>
+  <div class='pull-left'>
+    <img src='<%= items[i].image %>' class='media-object' />
+  </div>
+  <div class='media-body'>
+    <h4 class='media-heading'><%= items[i].title %></h4>
     <em>$<%= items[i].price %></em>
+    <p>
+      <span class='glyphicon glyphicon-link'></span>
+      <a href='<%= items[i].url %>' target='_blank'><%= items[i].hostname %></a>
+    </p>
+  </div>
+</div>
 
-    <div>
-      <img src='<%= items[i].image %>' />
-    </div>
+<% } %>
 
-    <% } %>
-
-  </body>
-</html>
+<% include ../layout/foot %>
