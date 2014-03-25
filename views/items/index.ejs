@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Collect | View Item</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+
+    <% for (var i = 0; i < items.length; i++) { %>
+
+    <h1><%= items[i].title %></h1>
+    <em>$<%= items[i].price %></em>
+
+    <div>
+      <img src='<%= items[i].image %>' />
+    </div>
+
+    <% } %>
+
+  </body>
+</html>

@@ -107,7 +107,7 @@ class Collectible
     popupParams.top = window.screenTop + (window.innerHeight - popupParams.height) * .4;
 
     queryString = ("#{key}=#{value}" for key, value of item).join('&')
-    url = "#{config.BASE_URL}/popup?#{queryString}"
+    url = "#{config.BASE_URL}/items/new?#{queryString}"
     popupParams = ("#{key}=#{value}" for key, value of popupParams).join(',')
     window.open(url, '_blank', popupParams)
 

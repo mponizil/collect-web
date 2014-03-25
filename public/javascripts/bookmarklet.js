@@ -124,7 +124,7 @@
         }
         return _results;
       })()).join('&');
-      url = "" + config.BASE_URL + "/popup?" + queryString;
+      url = "" + config.BASE_URL + "/items/new?" + queryString;
       popupParams = ((function() {
         var _results;
         _results = [];

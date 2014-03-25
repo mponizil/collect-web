@@ -4,6 +4,7 @@ http = require('http')
 path = require('path')
 
 app = express()
+app.config = require("./config/#{app.settings.env}")
 
 # all environments
 app.set('port', process.env.PORT or 3000)
@@ -21,10 +22,16 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.configure 'development', ->
   app.use(express.errorHandler())
 
+Kaiseki = require('kaiseki')
+app.kaiseki = new Kaiseki(app.config.PARSE_APP_ID, app.config.PARSE_REST_API_KEY)
+
 app.get('/', routes.index)
 app.get('/extras', routes.extras)
 app.get('/bookmarklet', routes.bookmarklet)
-app.get('/popup', routes.popup)
+
+app.get('/items', routes.items.index)
+app.get('/items/new', routes.items.new)
+app.post('/items', routes.items.create)
 
 http.createServer(app).listen app.get('port'), ->
   console.log("Express server listening on port #{app.get('port')}")

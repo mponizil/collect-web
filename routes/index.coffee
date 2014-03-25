@@ -31,10 +31,4 @@ exports.extras = (req, res) ->
   baseUrl = getBaseUrl(req)
   res.render('extras', bookmarkletUrl: "#{baseUrl}/bookmarklet")
 
-exports.popup = (req, res) ->
-  item =
-    title: req.query.title or "N/A"
-    image: req.query.image or "http://placehold.it/400x300"
-    price: req.query.price or "N/A"
-
-  res.render('popup', {item})
+exports.items = require('./items')
