@@ -27,6 +27,9 @@ app.configure ->
   app.use(express.session(secret: 'bankshot25'))
   app.use(passport.initialize())
   app.use(passport.session())
+  app.use (req, res, next) ->
+    res.locals.authenticated = req.isAuthenticated()
+    next()
   app.use(app.router)
   app.use(express.static(path.join(__dirname, 'public')))
 
@@ -39,18 +42,19 @@ Kaiseki = require('kaiseki')
 kaiseki = app.kaiseki = new Kaiseki(app.config.PARSE_APP_ID, app.config.PARSE_REST_API_KEY)
 
 # auth
-passport.use new PassportLocalStrategy (email, password, done) ->
-  console.log 'loginUser'
-  kaiseki.loginUser email, password, (error, response, user, success) ->
-    console.log 'loginUser cb', error, user, success
+passport.use new PassportLocalStrategy
+    usernameField: 'email',
+    passwordField: 'password'
+  , (email, password, done) ->
+    kaiseki.loginUser email, password, (error, response, user, success) ->
+      done(error, user)
 
 passport.serializeUser (user, done) ->
-  console.log 'serializeUser', user
   done(null, user.objectId)
 
 passport.deserializeUser (id, done) ->
-  console.log 'deserializeUser', id
-  done(false)
+  kaiseki.getUser id, (error, response, user, success) ->
+    done(null, user)
 
 authenticate = (req, res, next) ->
   if req.isAuthenticated() then next()
@@ -66,6 +70,7 @@ app.post('/signup', routes.register)
 app.get('/login', routes.login)
 app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res) ->
   res.redirect('/items')
+app.get('/logout', routes.logout)
 
 app.get('/items', authenticate, routes.items.index)
 app.get('/items/new', authenticate, routes.items.new)

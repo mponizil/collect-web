@@ -22,10 +22,15 @@ exports.register = (req, res) ->
   password = req.body.password
   req.app.kaiseki.createUser {username, email, password}, (error, response, user, success) ->
     # user.sessionToken
+    passport.authenticate('local')
     res.redirect('/items')
 
 exports.login = (req, res) ->
   res.render('login')
+
+exports.logout = (req, res) ->
+  req.logout()
+  res.redirect('/')
 
 exports.bookmarklet = (req, res) ->
   baseUrl = getBaseUrl(req)

@@ -22,6 +22,14 @@
             <li><a href='/items'>Items</a></li>
             <li><a href='/extras'>Extras</a></li>
           </ul>
+          <ul class='nav navbar-nav navbar-right'>
+            <% if (authenticated) { %>
+            <li><a href='/logout'>Logout</a></li>
+            <% } else { %>
+            <li><a href='/signup'>Signup</a></li>
+            <li><a href='/login'>Login</a></li>
+            <% } %>
+          </ul>
         </div>
       </div>
     </nav>
