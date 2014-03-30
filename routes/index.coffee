@@ -1,6 +1,7 @@
 fs = require('fs')
 path = require('path')
 ejs = require('ejs')
+
 bookmarkletjs = null
 
 getBaseUrl = (req) ->

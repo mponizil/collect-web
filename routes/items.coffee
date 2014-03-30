@@ -1,5 +1,5 @@
 exports.index = (req, res) ->
-  req.app.kaiseki.getObjects 'item', (err, response, items, success) ->
+  req.app.kaiseki.getObjects 'item', (error, response, items, success) ->
     res.render('items/index', {items})
 
 exports.new = (req, res) ->
@@ -20,5 +20,5 @@ exports.create = (req, res) ->
     hostname: req.body.hostname or "N/A"
     url: req.body.url or "N/A"
 
-  req.app.kaiseki.createObject 'item', item, (err, response, body, success) ->
+  req.app.kaiseki.createObject 'item', item, (error, response, body, success) ->
     res.redirect('/items')
