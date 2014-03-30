@@ -1,6 +1,7 @@
 fs = require('fs')
 path = require('path')
 ejs = require('ejs')
+passport = require('passport')
 
 bookmarkletjs = null
 
@@ -12,6 +13,19 @@ getBaseUrl = (req) ->
 
 exports.index = (req, res) ->
   res.render('index', title: "Collect it")
+
+exports.signup = (req, res) ->
+  res.render('signup')
+
+exports.register = (req, res) ->
+  username = email = req.body.email
+  password = req.body.password
+  req.app.kaiseki.createUser {username, email, password}, (error, response, user, success) ->
+    # user.sessionToken
+    res.redirect('/items')
+
+exports.login = (req, res) ->
+  res.render('login')
 
 exports.bookmarklet = (req, res) ->
   baseUrl = getBaseUrl(req)

@@ -1,3 +1,5 @@
+passport = require('passport')
+
 exports.index = (req, res) ->
   req.app.kaiseki.getObjects 'item', (error, response, items, success) ->
     res.render('items/index', {items})
