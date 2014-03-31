@@ -1,9 +1,9 @@
 {
-  "name": "application-name",
+  "name": "collect",
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "coffee app.coffee",
+    "start": "supervisor app.coffee",
     "postinstall": "coffee -c public/javascripts/"
   },
   "dependencies": {
