@@ -21,9 +21,8 @@ exports.register = (req, res) ->
   username = email = req.body.email
   password = req.body.password
   req.app.kaiseki.createUser {username, email, password}, (error, response, user, success) ->
-    # user.sessionToken
-    passport.authenticate('local')
-    res.redirect('/items')
+    req.login user, (error) ->
+      res.redirect('/items')
 
 exports.login = (req, res) ->
   res.render('login')

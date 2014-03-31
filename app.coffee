@@ -17,7 +17,6 @@ app.configure ->
   app.set('view engine', 'ejs')
 
   # middleware
-  # app.use(express.favicon())
   app.use(express.logger('dev'))
   app.use(express.json())
   app.use(express.urlencoded())
@@ -47,13 +46,17 @@ passport.use new PassportLocalStrategy
     passwordField: 'password'
   , (email, password, done) ->
     kaiseki.loginUser email, password, (error, response, user, success) ->
-      done(error, user)
+      if success
+        done(null, user)
+      else
+        done(null, false, message: user.error)
 
 passport.serializeUser (user, done) ->
-  done(null, user.objectId)
+  done(null, user.sessionToken)
 
-passport.deserializeUser (id, done) ->
-  kaiseki.getUser id, (error, response, user, success) ->
+passport.deserializeUser (sessionToken, done) ->
+  kaiseki.sessionToken = sessionToken
+  kaiseki.getCurrentUser (error, response, user, success) ->
     done(null, user)
 
 authenticate = (req, res, next) ->
@@ -68,8 +71,9 @@ app.get('/bookmarklet', routes.bookmarklet)
 app.get('/signup', routes.signup)
 app.post('/signup', routes.register)
 app.get('/login', routes.login)
-app.post '/login', passport.authenticate('local', failureRedirect: '/login'), (req, res) ->
-  res.redirect('/items')
+app.post('/login', passport.authenticate('local',
+  successRedirect: '/items',
+  failureRedirect: '/login'))
 app.get('/logout', routes.logout)
 
 app.get('/items', authenticate, routes.items.index)
