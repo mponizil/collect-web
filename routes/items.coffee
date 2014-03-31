@@ -1,7 +1,14 @@
 passport = require('passport')
 
 exports.index = (req, res) ->
-  req.app.kaiseki.getObjects 'item', (error, response, items, success) ->
+  params =
+    where:
+      collector:
+        __type: 'Pointer'
+        className: '_User'
+        objectId: req.user.objectId
+
+  req.app.kaiseki.getObjects 'item', params, (error, response, items, success) ->
     res.render('items/index', {items})
 
 exports.new = (req, res) ->
@@ -16,6 +23,10 @@ exports.new = (req, res) ->
 
 exports.create = (req, res) ->
   item =
+    collector:
+      __type: 'Pointer'
+      className: '_User'
+      objectId: req.user.objectId
     title: req.body.title or "N/A"
     image: req.body.image or "http://placehold.it/400x300"
     price: parseFloat(req.body.price) or 0

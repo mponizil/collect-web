@@ -61,7 +61,7 @@ passport.deserializeUser (sessionToken, done) ->
 
 authenticate = (req, res, next) ->
   if req.isAuthenticated() then next()
-  else res.redirect('/')
+  else res.redirect('/login')
 
 # routes
 app.get('/', routes.index)
