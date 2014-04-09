@@ -8,7 +8,7 @@ exports.index = (req, res) ->
         className: '_User'
         objectId: req.user.objectId
 
-  req.app.kaiseki.getObjects 'item', params, (error, response, items, success) ->
+  req.app.kaiseki.getObjects 'Item', params, (error, response, items, success) ->
     res.render('items/index', {items})
 
 exports.new = (req, res) ->
@@ -33,5 +33,5 @@ exports.create = (req, res) ->
     hostname: req.body.hostname or "N/A"
     url: req.body.url or "N/A"
 
-  req.app.kaiseki.createObject 'item', item, (error, response, body, success) ->
+  req.app.kaiseki.createObject 'Item', item, (error, response, body, success) ->
     res.redirect('/items')
