@@ -51,10 +51,11 @@ u =
 
 class Collectible
 
-  constructor: ->
+  initialize: ->
     @addCSS()
     @makeContainer()
     @highlightImages()
+    return this
 
   addCSS: ->
     styleElement = document.createElement('style')
@@ -91,7 +92,7 @@ class Collectible
     item =
       image: image.src
       title: document.title
-      price: 25.99
+      price: @getPrice()
       hostname: location.hostname
       url: location.href
 
@@ -115,6 +116,22 @@ class Collectible
     window.open(url, '_blank', popupParams)
 
   getPrice: ->
-    console.log 'getting price'
+    html = document.body.parentNode.outerHTML
+    matches = html.match(/\$(\d+\.\d{2})/g)
 
-new Collectible
+    options = {}
+    for match in matches
+      match = match.replace('$', '')
+      options[match] ?= 0
+      options[match] += 1
+
+    price = 0
+    max = 0
+    for option, count of options
+      if count > max
+        max = count
+        price = option
+
+    price
+
+(new Collectible).initialize()

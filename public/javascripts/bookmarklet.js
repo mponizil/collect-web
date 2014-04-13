@@ -41,11 +41,14 @@
   };
 
   Collectible = (function() {
-    function Collectible() {
+    function Collectible() {}
+
+    Collectible.prototype.initialize = function() {
       this.addCSS();
       this.makeContainer();
       this.highlightImages();
-    }
+      return this;
+    };
 
     Collectible.prototype.addCSS = function() {
       var styleElement, styleSheet;
@@ -96,11 +99,11 @@
     };
 
     Collectible.prototype.chooseImage = function(image) {
-      var item, key, popupParams, queryString, url, value;
+      var e, item, key, popupParams, queryString, url, value;
       item = {
         image: image.src,
         title: document.title,
-        price: 25.99,
+        price: this.getPrice(),
         hostname: location.hostname,
         url: location.href
       };
@@ -117,12 +120,13 @@
       };
       popupParams.left = window.screenLeft + (window.innerWidth - popupParams.width) * .5;
       popupParams.top = window.screenTop + (window.innerHeight - popupParams.height) * .4;
+      e = encodeURIComponent;
       queryString = ((function() {
         var _results;
         _results = [];
         for (key in item) {
           value = item[key];
-          _results.push("" + key + "=" + value);
+          _results.push("" + key + "=" + (e(value)));
         }
         return _results;
       })()).join('&');
@@ -140,13 +144,34 @@
     };
 
     Collectible.prototype.getPrice = function() {
-      return console.log('getting price');
+      var count, html, match, matches, max, option, options, price, _i, _len;
+      html = document.body.parentNode.outerHTML;
+      matches = html.match(/\$(\d+\.\d{2})/g);
+      options = {};
+      for (_i = 0, _len = matches.length; _i < _len; _i++) {
+        match = matches[_i];
+        match = match.replace('$', '');
+        if (options[match] == null) {
+          options[match] = 0;
+        }
+        options[match] += 1;
+      }
+      price = 0;
+      max = 0;
+      for (option in options) {
+        count = options[option];
+        if (count > max) {
+          max = count;
+          price = option;
+        }
+      }
+      return price;
     };
 
     return Collectible;
 
   })();
 
-  new Collectible;
+  (new Collectible).initialize();
 
 }).call(this);
