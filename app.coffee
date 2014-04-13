@@ -79,6 +79,7 @@ app.get('/logout', routes.logout)
 app.get('/items', authenticate, routes.items.index)
 app.get('/items/new', authenticate, routes.items.new)
 app.post('/items', authenticate, routes.items.create)
+app.delete('/items/:id', authenticate, routes.items.destroy)
 
 http.createServer(app).listen app.get('port'), ->
   console.log("Express server listening on port #{app.get('port')}")

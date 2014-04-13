@@ -1,19 +1,34 @@
 <% include ../layout/head %>
 
+<script type='text/javascript'>
+$(collect.pages.items.index);
+</script>
+
 <h2><%= items.length %> saved item<%= items.length !== 1 ? 's' : '' %></h2>
 
 <% for (var i = 0; i < items.length; i++) { %>
 
-<div class='media'>
+<div class='media' data-item-id='<%= items[i].objectId %>'>
   <div class='pull-left'>
-    <img src='<%= items[i].image %>' class='media-object' />
+    <a href='<%= items[i].url %>' target='_blank'>
+      <img src='<%= items[i].image %>' class='media-object' />
+    </a>
   </div>
   <div class='media-body'>
-    <h4 class='media-heading'><%= items[i].title %></h4>
+    <h4 class='media-heading'>
+      <a href='<%= items[i].url %>' target='_blank'>
+        <%= items[i].title %>
+      </a>
+    </h4>
     <em>$<%= items[i].price %></em>
     <p>
       <span class='glyphicon glyphicon-link'></span>
       <a href='<%= items[i].url %>' target='_blank'><%= items[i].hostname %></a>
+    </p>
+    <p>
+      <button class='btn btn-danger' data-item-delete>
+        <span class='glyphicon glyphicon-remove'></span> Delete
+      </button>
     </p>
   </div>
 </div>

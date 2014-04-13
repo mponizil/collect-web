@@ -35,3 +35,10 @@ exports.create = (req, res) ->
 
   req.app.kaiseki.createObject 'Item', item, (error, response, body, success) ->
     res.redirect('/items')
+
+exports.destroy = (req, res) ->
+  req.app.kaiseki.deleteObject 'Item', req.params.id, (error, response, body, success) ->
+    if error
+      res.json(error)
+    else
+      res.json(200)

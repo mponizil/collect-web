@@ -146,11 +146,11 @@
     Collectible.prototype.getPrice = function() {
       var count, html, match, matches, max, option, options, price, _i, _len;
       html = document.body.parentNode.outerHTML;
-      matches = html.match(/\$(\d+\.\d{2})/g);
+      matches = html.match(/\$?([,\d]+\.\d{2})/g);
       options = {};
       for (_i = 0, _len = matches.length; _i < _len; _i++) {
         match = matches[_i];
-        match = match.replace('$', '');
+        match = match.replace(/[\$,]/g, '');
         if (options[match] == null) {
           options[match] = 0;
         }

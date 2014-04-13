@@ -115,13 +115,14 @@ class Collectible
     popupParams = ("#{key}=#{value}" for key, value of popupParams).join(',')
     window.open(url, '_blank', popupParams)
 
+  # [TODO] filter for most prominent number that's close to the image clicked.
   getPrice: ->
     html = document.body.parentNode.outerHTML
-    matches = html.match(/\$(\d+\.\d{2})/g)
+    matches = html.match(/\$?([,\d]+\.\d{2})/g)
 
     options = {}
     for match in matches
-      match = match.replace('$', '')
+      match = match.replace(/[\$,]/g, '')
       options[match] ?= 0
       options[match] += 1
 
