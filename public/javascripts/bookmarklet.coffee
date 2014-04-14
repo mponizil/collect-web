@@ -3,6 +3,7 @@
 css = """
 #collect-wrap {
   position: static;
+  font-size: 14px;
 }
 #collect-wrap .image-candidate {
   position: absolute;
@@ -13,6 +14,29 @@ css = """
 #collect-wrap .image-candidate:hover {
   background-color: rgba(255, 255, 255, 0.3);
 }
+#collect-wrap .info {
+  padding: 10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+}
+#collect-wrap .info button {
+  padding: 4px;
+  border-radius: 5px;
+  font-size: 14px;
+  border: 1px solid black;
+}
+#collect-wrap .info button#collect-destroy:hover {
+  background-color: red;
+}
+"""
+
+# Markup
+
+infoTemplate = -> """
+<h4>Collect</h4>
+<button id='collect-destroy'>Remove</button>
 """
 
 # Config
@@ -51,22 +75,31 @@ u =
 
 class Collectible
 
-  initialize: ->
-    @addCSS()
+  constructor: ->
     @makeContainer()
+    @addCSS()
+    @addInfo()
     @highlightImages()
-    return this
-
-  addCSS: ->
-    styleElement = document.createElement('style')
-    document.getElementsByTagName('head')[0].appendChild(styleElement)
-    styleSheet = document.createTextNode(css)
-    styleElement.appendChild(styleSheet)
 
   makeContainer: ->
     @containerEl = document.createElement('div')
     @containerEl.id = 'collect-wrap'
     document.getElementsByTagName('body')[0].appendChild(@containerEl)
+
+  addCSS: ->
+    @styleEl = document.createElement('style')
+    @containerEl.appendChild(@styleEl)
+    styleSheet = document.createTextNode(css)
+    @styleEl.appendChild(styleSheet)
+
+  addInfo: ->
+    @infoEl = document.createElement('div')
+    u.addClass(@infoEl, 'info')
+    @infoEl.innerHTML = infoTemplate()
+    @containerEl.appendChild(@infoEl)
+
+    u.on document.getElementById('collect-destroy'), 'click', (e) =>
+      @destroy()
 
   highlightImages: ->
     for image in document.querySelectorAll('img')
@@ -74,19 +107,19 @@ class Collectible
         @makeCollectible(image)
 
   makeCollectible: (image) ->
-    overlay = document.createElement('div')
-    u.addClass(overlay, 'image-candidate')
+    overlayEl = document.createElement('div')
+    u.addClass(overlayEl, 'image-candidate')
 
     {left, top} = u.getOffset(image)
-    overlay.style.left = "#{left}px"
-    overlay.style.top = "#{top}px"
-    overlay.style.width = "#{image.offsetWidth}px"
-    overlay.style.height = "#{image.offsetHeight}px"
+    overlayEl.style.left = "#{left}px"
+    overlayEl.style.top = "#{top}px"
+    overlayEl.style.width = "#{image.offsetWidth}px"
+    overlayEl.style.height = "#{image.offsetHeight}px"
 
-    u.on overlay, 'click', (e) => do (image) =>
+    u.on overlayEl, 'click', (e) => do (image) =>
       @chooseImage(image)
 
-    @containerEl.appendChild(overlay)
+    @containerEl.appendChild(overlayEl)
 
   chooseImage: (image) ->
     item =
@@ -135,4 +168,8 @@ class Collectible
 
     price
 
-(new Collectible).initialize()
+  destroy: ->
+    @containerEl.parentNode.removeChild(@containerEl)
+
+# Export global
+collect = window.collect = new Collectible
