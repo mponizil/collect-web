@@ -103,8 +103,13 @@ class Collectible
 
   highlightImages: ->
     for image in document.querySelectorAll('img')
-      if image.offsetWidth > 100 and image.offsetHeight > 100
-        @makeCollectible(image)
+      if image.offsetWidth < 100 or image.offsetHeight < 100
+        continue
+
+      if u.getOffset(image).top > 600
+        continue
+
+      @makeCollectible(image)
 
   makeCollectible: (image) ->
     overlayEl = document.createElement('div')
