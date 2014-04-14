@@ -20,7 +20,7 @@ $(collect.pages.items.index);
         <%= items[i].title %>
       </a>
     </h4>
-    <em>$<%= items[i].price %></em>
+    <em>$<%= pricify(items[i].price) %></em>
     <p>
       <span class='glyphicon glyphicon-link'></span>
       <a href='<%= items[i].url %>' target='_blank'><%= items[i].hostname %></a>

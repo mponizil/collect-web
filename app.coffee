@@ -63,6 +63,10 @@ authenticate = (req, res, next) ->
   if req.isAuthenticated() then next()
   else res.redirect('/login')
 
+# helpers
+app.locals.pricify = (price) ->
+  Number(price).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
 # routes
 app.get('/', routes.index)
 app.get('/extras', routes.extras)

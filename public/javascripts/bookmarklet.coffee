@@ -26,6 +26,7 @@ css = """
   border-radius: 5px;
   font-size: 14px;
   border: 1px solid black;
+  cursor: pointer;
 }
 #collect-wrap .info button#collect-destroy:hover {
   background-color: red;
@@ -62,14 +63,18 @@ u =
 
   # DOM computation
   getOffset: (el) ->
-    left = 0
-    top = 0
+    x = 0
+    y = 0
     while el and el isnt document.body
       continue if isNaN(el.offsetLeft) or isNaN(el.offsetTop)
-      left += (el.offsetLeft - el.scrollLeft + el.clientLeft)
-      top += (el.offsetTop - el.scrollTop + el.clientTop)
+      x += (el.offsetLeft - el.scrollLeft + el.clientLeft)
+      y += (el.offsetTop - el.scrollTop + el.clientTop)
       el = el.offsetParent
-    {left, top}
+    {x, y}
+  distance: (point1, point2) ->
+    xSquared = Math.pow(point2.x - point1.x, 2)
+    ySquared = Math.pow(point2.y - point1.y, 2)
+    Math.sqrt(ySquared + xSquared)
 
 # Bookmarklet
 
@@ -103,10 +108,10 @@ class Collectible
 
   highlightImages: ->
     for image in document.querySelectorAll('img')
-      if image.offsetWidth < 100 or image.offsetHeight < 100
+      if image.offsetWidth < 110 or image.offsetHeight < 110
         continue
 
-      if u.getOffset(image).top > 600
+      if u.getOffset(image).y > 600
         continue
 
       @makeCollectible(image)
@@ -115,9 +120,9 @@ class Collectible
     overlayEl = document.createElement('div')
     u.addClass(overlayEl, 'image-candidate')
 
-    {left, top} = u.getOffset(image)
-    overlayEl.style.left = "#{left}px"
-    overlayEl.style.top = "#{top}px"
+    {x, y} = u.getOffset(image)
+    overlayEl.style.left = "#{x}px"
+    overlayEl.style.top = "#{y}px"
     overlayEl.style.width = "#{image.offsetWidth}px"
     overlayEl.style.height = "#{image.offsetHeight}px"
 
@@ -130,7 +135,7 @@ class Collectible
     item =
       image: image.src
       title: document.title
-      price: @getPrice()
+      price: @getPrice(image)
       hostname: location.hostname
       url: location.href
 
@@ -153,28 +158,44 @@ class Collectible
     popupParams = ("#{key}=#{value}" for key, value of popupParams).join(',')
     window.open(url, '_blank', popupParams)
 
-  # [TODO] filter for most prominent number that's close to the image clicked.
-  getPrice: ->
-    html = document.body.parentNode.outerHTML
-    matches = html.match(/\$?([,\d]+\.\d{2})/g)
+  getPrice: (image) ->
+    imageOffset = u.getOffset(image)
+    imageCenterOffset =
+      x: imageOffset.x + (image.offsetWidth / 2)
+      y: imageOffset.y + (image.offsetHeight / 2)
 
-    options = {}
-    for match in matches
-      match = match.replace(/[\$,]/g, '')
-      options[match] ?= 0
-      options[match] += 1
+    nodes = document.getElementsByTagName('*')
+    prices = []
 
-    price = 0
-    max = 0
-    for option, count of options
-      if count > max
-        max = count
-        price = option
+    for node in nodes
 
-    price
+      if node.childNodes.length isnt 1
+        continue
+
+      if node.childNodes[0].nodeType isnt 3
+        continue
+
+      if not matches = node.innerText.match(/\$?[\d,\.]+/g)
+        continue
+
+      for match in matches
+        match = parseFloat(match.replace(/[\$,]/g, ''))
+        if match is +match # exlude NaNs
+          distance = u.distance(imageCenterOffset, u.getOffset(node))
+          prices.push({node, match, distance})
+
+    prices.sort (price1, price2) -> price1.distance - price2.distance
+
+    prices[0].match
 
   destroy: ->
+    embedEl = document.getElementById('collect-embed')
+    embedEl?.parentNode.removeChild(embedEl)
     @containerEl.parentNode.removeChild(@containerEl)
 
 # Export global
-collect = window.collect = new Collectible
+collect = window.collect =
+  initialize: -> @instance = new Collectible
+  util: u
+
+collect.initialize()
