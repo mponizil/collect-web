@@ -187,7 +187,7 @@ class Collectible
 
     prices.sort (price1, price2) -> price1.distance - price2.distance
 
-    prices[0].match
+    prices[0]?.match or '0.00'
 
   destroy: ->
     embedEl = document.getElementById('collect-embed')
