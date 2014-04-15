@@ -175,7 +175,8 @@ class Collectible
       if node.childNodes[0].nodeType isnt 3
         continue
 
-      if not matches = node.innerText.match(/\$?[\d,\.]+/g)
+      text = node.nodeValue or ''
+      if not matches = text.match(/\$?[\d,\.]+/g)
         continue
 
       for match in matches
