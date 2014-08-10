@@ -7,6 +7,7 @@ exports.index = (req, res) ->
         __type: 'Pointer'
         className: '_User'
         objectId: req.user.objectId
+    order: '-createdAt'
 
   req.app.kaiseki.getObjects 'Item', params, (error, response, items, success) ->
     res.render('items/index', {items})
