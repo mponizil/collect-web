@@ -8,4 +8,4 @@ Shop online, send products to your phone.
 
 ![View inventory](example/screenshots/items.png)
 
-[Collect (mobile)](https://github.com/mponizil/collect-mobile)
+[Collect (Mobile)](https://github.com/mponizil/collect-mobile)
