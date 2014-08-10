@@ -1,7 +1,6 @@
 fs = require('fs')
 path = require('path')
 ejs = require('ejs')
-passport = require('passport')
 
 bookmarkletjs = null
 
